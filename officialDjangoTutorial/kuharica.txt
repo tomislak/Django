@@ -80,3 +80,45 @@ Hello, world. You're at the polls index.
 Part 2
 ------
 https://docs.djangoproject.com/en/6.0/intro/tutorial02/
+
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ vi mysite/settings.py
+TIME_ZONE = 'Europe/Zagreb'
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ python3 ./manage.py migrate
+
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ vi polls/models.py
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ vi mysite/settings.py
+
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ python3 ./manage.py makemigrations polls
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ python3 ./manage.py sqlmigrate polls 0001
+BEGIN;
+--
+-- Create model Question
+--
+CREATE TABLE "polls_question" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "question_text" varchar(2) NOT NULL, "pub_date" datetime NOT NULL);
+--
+-- Create model Choice
+--
+CREATE TABLE "polls_choice" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "choice_text" varchar(200) NOT NULL, "votes" integer NOT NULL, "question_id" bigint NOT NULL REFERENCES "polls_question" ("id") DEFERRABLE INITIALLY DEFERRED);
+CREATE INDEX "polls_choice_question_id_c5b4b260" ON "polls_choice" ("question_id");
+COMMIT;
+
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ python3 ./manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, polls, sessions
+Running migrations:
+  Applying polls.0001_initial... OK
+
+
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ python3 ./manage.py createsuperuser
+Username (leave blank to use 'etokral'): admin
+Email address: admin@example.com
+Password: etokral.123
+Password (again): etokral.123
+Superuser created successfully.
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ 
+
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ python3 manage.py runserver 172.20.158.31:8000
+
+http://172.20.158.31:8000/admin
+
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ vi polls/admin.py
