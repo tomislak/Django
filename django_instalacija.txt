@@ -1,0 +1,131 @@
+https://docs.djangoproject.com/en/6.0/intro/install/
+
+https://docs.fedoraproject.org/en-US/quick-docs/postgresql/
+root@fedora43:~# dnf install postgresql-server.x86_64 postgresql-contrib.x86_64
+Updating and loading repositories:
+Repositories loaded.
+Package                                           Arch         Version                                           Repository                     Size
+Installing:
+ postgresql-contrib                               x86_64       18.1-1.fc43                                       updates                     3.6 MiB
+ postgresql-server                                x86_64       18.1-1.fc43                                       updates                    31.7 MiB
+Installing dependencies:
+ postgresql                                       x86_64       18.1-1.fc43                                       updates                     8.3 MiB
+ postgresql-private-libs                          x86_64       18.1-1.fc43                                       updates                   372.0 KiB
+ uuid                                             x86_64       1.6.2-67.fc43                                     fedora                    128.6 KiB
+
+Transaction Summary:
+ Installing:         5 packages
+
+Total size of inbound packages is 11 MiB. Need to download 11 MiB.
+After this operation, 44 MiB extra will be used (install 44 MiB, remove 0 B).
+Is this ok [y/N]: y
+[1/5] postgresql-contrib-0:18.1-1.fc43.x86_64                                                               100% |   1.6 MiB/s |   1.1 MiB |  00m01s
+[2/5] postgresql-0:18.1-1.fc43.x86_64                                                                       100% |   2.3 MiB/s |   2.0 MiB |  00m01s
+[3/5] postgresql-private-libs-0:18.1-1.fc43.x86_64                                                          100% |   3.2 MiB/s | 159.2 KiB |  00m00s
+[4/5] uuid-0:1.6.2-67.fc43.x86_64                                                                           100% | 208.2 KiB/s |  58.7 KiB |  00m00s
+[5/5] postgresql-server-0:18.1-1.fc43.x86_64                                                                100% |   4.8 MiB/s |   7.5 MiB |  00m02s
+----------------------------------------------------------------------------------------------------------------------------------------------------
+[5/5] Total                                                                                                 100% |   5.9 MiB/s |  10.8 MiB |  00m02s
+Running transaction
+[1/7] Verify package files                                                                                  100% | 156.0   B/s |   5.0   B |  00m00s
+[2/7] Prepare transaction                                                                                   100% |  83.0   B/s |   5.0   B |  00m00s
+[3/7] Installing postgresql-private-libs-0:18.1-1.fc43.x86_64                                               100% |  21.4 MiB/s | 372.8 KiB |  00m00s
+[4/7] Installing postgresql-0:18.1-1.fc43.x86_64                                                            100% | 132.2 MiB/s |   8.3 MiB |  00m00s
+[5/7] Installing uuid-0:1.6.2-67.fc43.x86_64                                                                100% |   5.6 MiB/s | 131.5 KiB |  00m00s
+[6/7] Installing postgresql-contrib-0:18.1-1.fc43.x86_64                                                    100% |  30.0 MiB/s |   3.7 MiB |  00m00s
+>>> Running sysusers scriptlet: postgresql-server-0:18.1-1.fc43.x86_64                                                                              
+>>> Finished sysusers scriptlet: postgresql-server-0:18.1-1.fc43.x86_64                                                                             
+>>> Scriptlet output:                                                                                                                               
+>>> Creating group 'postgres' with GID 26.                                                                                                          
+>>> Creating user 'postgres' (PostgreSQL Server) with UID 26 and GID 26.                                                                            
+>>>                                                                                                                                                 
+[7/7] Installing postgresql-server-0:18.1-1.fc43.x86_64                                                     100% |  41.2 MiB/s |  31.7 MiB |  00m01s
+Complete!
+root@fedora43:~# 
+
+root@fedora43:~# python3
+Python 3.14.0 (main, Oct  7 2025, 00:00:00) [GCC 15.2.1 20250924 (Red Hat 15.2.1-2)] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> quit
+root@fedora43:~# systemctl enable postgresql
+root@fedora43:~# postgresql-setup --initdb --unit postgresql
+ * Initializing database in '/var/lib/pgsql/data'
+ * Initialized, logs are in /var/lib/pgsql/initdb_postgresql.log
+root@fedora43:~# systemctl start postgresql
+
+root@fedora43:~# su - postgres
+postgres@fedora43:~$ psql
+psql (18.1)
+Type "help" for help.
+
+postgres=# create user django with password 'django';
+CREATE ROLE
+postgres=# create database django owner django;
+CREATE DATABASE
+postgres=# \q
+postgres@fedora43:~$ psql django
+psql (18.1)
+Type "help" for help.
+
+postgres@fedora43:~$ vi /var/lib/pgsql/data/pg_hba.conf
+# IPv4 local connections:
+host    django          django          127.0.0.1/32            md5
+
+postgres@fedora43:~$ psql -U django -h 127.0.0.1 django
+Password for user django: 
+psql (18.1)
+Type "help" for help.
+
+django=> \conninfo
+      Connection Information
+      Parameter       |   Value   
+----------------------+-----------
+ Database             | django
+ Client User          | django
+ Host                 | 127.0.0.1
+ Server Port          | 5432
+ Options              | 
+ Protocol Version     | 3.0
+ Password Used        | true
+ GSSAPI Authenticated | false
+ Backend PID          | 6151
+ SSL Connection       | false
+ Superuser            | off
+ Hot Standby          | off
+(12 rows)
+
+django=> 
+
+etokral@fedora43:~/Projekti/Django$ pip install "psycopg[binary]"
+Defaulting to user installation because normal site-packages is not writeable
+Collecting psycopg[binary]
+  Downloading psycopg-3.3.2-py3-none-any.whl.metadata (4.3 kB)
+Collecting psycopg-binary==3.3.2 (from psycopg[binary])
+  Downloading psycopg_binary-3.3.2-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.7 kB)
+Downloading psycopg-3.3.2-py3-none-any.whl (212 kB)
+Downloading psycopg_binary-3.3.2-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.1/5.1 MB 8.7 MB/s eta 0:00:00
+Installing collected packages: psycopg-binary, psycopg
+Successfully installed psycopg-3.3.2 psycopg-binary-3.3.2
+etokral@fedora43:~/Projekti/Django$ pip freeze | grep psy
+psycopg==3.3.2
+psycopg-binary==3.3.2
+
+
+etokral@fedora43:~/Projekti/Django$ python3 -m pip install Django
+Defaulting to user installation because normal site-packages is not writeable
+Collecting Django
+  Downloading django-6.0-py3-none-any.whl.metadata (3.9 kB)
+Collecting asgiref>=3.9.1 (from Django)
+  Downloading asgiref-3.11.0-py3-none-any.whl.metadata (9.3 kB)
+Collecting sqlparse>=0.5.0 (from Django)
+  Downloading sqlparse-0.5.5-py3-none-any.whl.metadata (4.7 kB)
+Downloading django-6.0-py3-none-any.whl (8.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 8.3/8.3 MB 10.7 MB/s eta 0:00:00
+Downloading asgiref-3.11.0-py3-none-any.whl (24 kB)
+Downloading sqlparse-0.5.5-py3-none-any.whl (46 kB)
+Installing collected packages: sqlparse, asgiref, Django
+Successfully installed Django-6.0 asgiref-3.11.0 sqlparse-0.5.5
+etokral@fedora43:~/Projekti/Django$ pip freeze | grep -i django
+Django==6.0
+

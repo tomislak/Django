@@ -1,0 +1,82 @@
+Part 1
+------
+https://docs.djangoproject.com/en/6.0/intro/tutorial01/
+
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial$ python3 -m django --version
+6.0
+
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial$ django-admin startproject mysite djangotutorial
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial$ ls -lAR ./djangotutorial/
+./djangotutorial/:
+total 4
+-rwxr-xr-x. 1 etokral etokral 662 Dec 23 09:33 manage.py
+drwxr-xr-x. 2 etokral etokral  89 Dec 23 09:33 mysite
+
+./djangotutorial/mysite:
+total 16
+-rw-r--r--. 1 etokral etokral  389 Dec 23 09:33 asgi.py
+-rw-r--r--. 1 etokral etokral    0 Dec 23 09:33 __init__.py
+-rw-r--r--. 1 etokral etokral 2998 Dec 23 09:33 settings.py
+-rw-r--r--. 1 etokral etokral  762 Dec 23 09:33 urls.py
+-rw-r--r--. 1 etokral etokral  389 Dec 23 09:33 wsgi.py
+
+root@fedora43:~# firewall-cmd --add-port=8000/tcp
+success
+root@fedora43:~# firewall-cmd --list-all
+FedoraServer (default, active)
+  target: default
+  ingress-priority: 0
+  egress-priority: 0
+  icmp-block-inversion: no
+  interfaces: eth0
+  sources: 
+  services: cockpit dhcpv6-client ssh
+  ports: 8000/tcp
+  protocols: 
+  forward: yes
+  masquerade: no
+  forward-ports: 
+  source-ports: 
+  icmp-blocks: 
+  rich rules: 
+root@fedora43:~# firewall-cmd --add-port=8000/tcp --permanent
+success
+
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ vi ./mysite/settings.py
+ALLOWED_HOSTS = [ '172.20.158.31',]
+
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ python3 manage.py runserver 172.20.158.31:8000
+
+http://172.20.158.31:8000/
+
+
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ python3 manage.py startapp polls
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ ls -lAR polls/
+polls/:
+total 20
+-rw-r--r--. 1 etokral etokral 63 Dec 23 10:49 admin.py
+-rw-r--r--. 1 etokral etokral 85 Dec 23 10:49 apps.py
+-rw-r--r--. 1 etokral etokral  0 Dec 23 10:49 __init__.py
+drwxr-xr-x. 2 etokral etokral 25 Dec 23 10:49 migrations
+-rw-r--r--. 1 etokral etokral 57 Dec 23 10:49 models.py
+-rw-r--r--. 1 etokral etokral 60 Dec 23 10:49 tests.py
+-rw-r--r--. 1 etokral etokral 63 Dec 23 10:49 views.py
+
+polls/migrations:
+total 0
+-rw-r--r--. 1 etokral etokral 0 Dec 23 10:49 __init__.py
+
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ python3 manage.py startapp polls
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ vi polls/views.py
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ vi polls/urls.py
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ vi mysite/urls.py
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ python3 manage.py runserver 172.20.158.31:8000
+
+http://172.20.158.31:8000/polls/
+
+[etokral@fedora43 ~]$ curl http://172.20.158.31:8000/polls/
+Hello, world. You're at the polls index.
+
+Part 2
+------
+https://docs.djangoproject.com/en/6.0/intro/tutorial02/
