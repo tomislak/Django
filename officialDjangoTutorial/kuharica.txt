@@ -122,3 +122,17 @@ etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ python
 http://172.20.158.31:8000/admin
 
 etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ vi polls/admin.py
+
+
+Part 3
+------
+https://docs.djangoproject.com/en/6.0/intro/tutorial03/
+
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ vi polls/views.py
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial$ vi polls/urls.py
+
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial/polls$ mkdir templates
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial/polls$ cd templates
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial/polls/templates$ mkdir polls
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial/polls/templates$ cd polls/
+etokral@fedora43:~/Projekti/Django/officialDjangoTutorial/djangotutorial/polls/templates/polls$ vi index.html
